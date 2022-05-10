@@ -3,6 +3,7 @@ import * as view from "./view.js";
 
 const init = () => {
     model.init();
+    model.init();
     view.init();
 }
 

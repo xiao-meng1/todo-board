@@ -1,0 +1,132 @@
+@font-face {
+    font-family: Roboto;
+    src: url(Roboto-Regular.ttf);
+    font-weight: 600;
+    font-style: normal;
+}
+
+:root {
+    box-sizing: border-box;
+    font-family: "Roboto", sans-serif;
+    font-size: 14px;
+}
+
+html, body {
+    width: 100%;
+    margin: 0;
+}
+
+body {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    background-color: rgb(190, 219, 229);
+}
+
+header {
+    display: flex;
+    align-items: center;
+    padding: 10px 100px;
+    font-size: 24px;
+    background-color: aliceblue;
+}
+
+.board {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 260px;
+    grid-auto-columns: 260px;
+    align-items: start;
+    gap: 40px;
+    padding: 20px 40px;
+}
+
+.list {
+    background-color:aliceblue;
+    padding: 10px;
+    border-radius: 10px;
+    border-left: solid black 10px;
+}
+
+.list > .list-name {
+    padding-bottom: 30px;
+    font-size: 20px;
+}
+
+.list > .new-task-container {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    gap: 4px;
+    padding-bottom: 20px;
+}
+
+.list > .new-task-container > .plus-icon-container {
+    display: flex;
+    align-items: center;
+}
+
+.list > .uncomplete-container .date-container{
+    padding-bottom: 20px;
+}
+
+.list > .uncomplete-container .date{
+    padding-bottom: 4px;
+}
+
+.list .task-container {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    grid-template-rows: auto auto;
+    gap: 4px;
+}
+
+.list .task-container > .complete-icon-container {
+    display: flex;
+    align-items: center;
+}
+
+.list .task-container > .container {
+    grid-row: 2 / 3;
+    grid-column: 2 / 3;
+    display: flex;
+    gap: 10px;
+}
+
+.list .task-time, .list .priority-icon {
+    padding: 1px 8px;
+    border-radius: 20px;
+    background-color: lightyellow;
+}
+
+.list > .completed-container > .completed-header {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 10px;
+    border-top: solid grey 1px;
+}
+
+.list > .completed-container .completed-header-icon {
+    display: flex;
+    align-items: center;
+}
+
+.list > .completed-container > .tasks-container {
+    padding-top: 10px;
+}
+
+.list > .completed-container .task-container {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    padding-bottom: 4px;
+}
+
+.list > .completed-container .complete-icon-container {
+    display: flex;
+    align-items: center;
+} 
+
+.add-new-list {
+    background-color:aliceblue;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+}

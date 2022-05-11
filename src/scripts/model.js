@@ -2,7 +2,7 @@ import * as controller from "./controller.js"
 
 let _board;
 
-const init = () => {
+const initializeBoard = () => {
     if (_storageAvailable("localStorage") && _boardInStorage()) {
         _board = localStorage.getItem("board");
     }
@@ -40,4 +40,4 @@ const _boardInStorage = () => {
     return (localStorage.getItem("board") ? true : false);
 }
 
-export {init};
+export {initializeBoard};

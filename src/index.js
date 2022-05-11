@@ -14,16 +14,15 @@ controller.init();
 //                              priority (str), complete (boolean), 
 //                              updateName(), updateDateTime(), updatePriority(), updateComplete(),
 //                              delete())
-//  init(), createList(), createTask(), addList(), addTask(), getList(), getTask(), updateList(),
+//  inititializeBoard(), createList(), createTask(), addList(), addTask(), getList(), getTask(), updateList(),
 //      updateTask(), deleteList(), deleteTask()
 //
 //View
-//  DOMBodyModel (nodelist)
 //  newListPopup (nodeList)
 //  newTaskPopup (nodelist)
 //  editListPopup (nodeList)
 //  editTaskPopup (nodeList)
-//  init(), renderDOMBody(), addPopup(), removePopup(), createList(), 
+//  initializeTemplate(), createTemplate(), addTemplate() addPopup(), removePopup(), createList(), 
 //  createTask(), addList(), addTask()
 //  
 //Controller

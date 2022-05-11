@@ -1,7 +1,7 @@
 import * as controller from "./controller.js"
 
-const init = () => {
-
+const initializeTemplate = () => {
+    
 }
 
-export {init};
+export {initializeTemplate};

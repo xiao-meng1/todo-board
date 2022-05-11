@@ -64,6 +64,11 @@ header {
     align-items: center;
 }
 
+.list > .new-task-container > .add-new-task {
+    display: flex;
+    align-items: center;
+}
+
 .list > .uncomplete-container .date-container{
     padding-bottom: 20px;
 }
@@ -80,6 +85,11 @@ header {
 }
 
 .list .task-container > .complete-icon-container {
+    display: flex;
+    align-items: center;
+}
+
+.list .task-container > .task-name {
     display: flex;
     align-items: center;
 }
@@ -109,6 +119,11 @@ header {
     align-items: center;
 }
 
+.list .completed-header > .header-text {
+    display: flex;
+    align-items: center;
+}
+
 .list > .completed-container > .tasks-container {
     padding-top: 10px;
 }
@@ -123,6 +138,10 @@ header {
     display: flex;
     align-items: center;
 } 
+
+.list .icon {
+    height: 16px;
+}
 
 .add-new-list {
     background-color:aliceblue;

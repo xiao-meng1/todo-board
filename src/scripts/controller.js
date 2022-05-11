@@ -6,4 +6,11 @@ const init = () => {
     view.initializeTemplate();
 }
 
-export {init};
+const addNewList = () => {
+    const listFromModel = model.createList("Sample list", "blue");
+    model.addList(listFromModel);
+    const listFromView = view.createList(listFromModel);
+    view.addList(listFromView);
+}
+
+export {init, addNewList};

@@ -3,6 +3,9 @@ import * as controller from "./scripts/controller.js";
 
 controller.init();
 
+//test function calls
+controller.addNewList();
+
 //Planning
 //Index
 //  controller.init();
@@ -26,6 +29,7 @@ controller.init();
 //  createTask(), addList(), addTask()
 //  
 //Controller
-//  init(), addNewListPopup(e), addNewTaskPopup(e), exitPopup(e), 
-//  createNewList(e), createNewTask(e), updateList(e), updateTask(e),
+//  init(), addNewListPopup(e), addNewTaskPopup(e), editListPopup(e),
+//  editTaskPopup(e), exitPopup(e), 
+//  addNewList(e), addNewTask(e), editList(e), editTask(e),
 //  deleteList(e), deleteAllCompletedLists(e), deleteTask(e)

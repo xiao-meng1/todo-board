@@ -1,17 +1,17 @@
 import * as controller from "./controller.js"
 
-let _board;
+let board;
 
 const initializeBoard = () => {
-    if (_storageAvailable("localStorage") && _boardInStorage()) {
-        _board = localStorage.getItem("board");
+    if (storageAvailable("localStorage") && boardInStorage()) {
+        board = localStorage.getItem("board");
     }
     else {
-        _board = [];
+        board = [];
     }
 };
 
-const _storageAvailable = (type) => {
+const storageAvailable = (type) => {
     let storage;
     try {
         storage = window[type];
@@ -36,11 +36,11 @@ const _storageAvailable = (type) => {
     }
 };
 
-const _boardInStorage = () => {
+const boardInStorage = () => {
     return (localStorage.getItem("board") ? true : false);
 };
 
-const CreateList = (name, color) => {
+const createList = (name, color) => {
     const content = [];
     const updateName = (newName) => {name = newName};
     const updateColor = (newColor) => {color = newColor};
@@ -48,9 +48,9 @@ const CreateList = (name, color) => {
     return {name, color, content, updateName, updateColor};
 };
 
-const addList = (list) => {_board.push(list)};
+const addList = (list) => {board.push(list)};
 
 export {initializeBoard,
-        CreateList,
+        createList,
         addList,
 };

@@ -9,7 +9,7 @@ const initializeBoard = () => {
     else {
         _board = [];
     }
-}
+};
 
 const _storageAvailable = (type) => {
     let storage;
@@ -34,10 +34,23 @@ const _storageAvailable = (type) => {
             // acknowledge QuotaExceededError only if there's something already stored
             (storage && storage.length !== 0);
     }
-}
+};
 
 const _boardInStorage = () => {
     return (localStorage.getItem("board") ? true : false);
-}
+};
 
-export {initializeBoard};
+const CreateList = (name, color) => {
+    const content = [];
+    const updateName = (newName) => {name = newName};
+    const updateColor = (newColor) => {color = newColor};
+
+    return {name, color, content, updateName, updateColor};
+};
+
+const addList = (list) => {_board.push(list)};
+
+export {initializeBoard,
+        CreateList,
+        addList,
+};

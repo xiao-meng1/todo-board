@@ -7,7 +7,7 @@ controller.init();
 //Index
 //  controller.init();
 //Model
-//  board (array) -> list (object: name (num), color (str), content (array), 
+//  board (array) -> list (object: name (str), color (str), content (array), 
 //                      updateName(), updateColor(),
 //                      delete(), deleteAllCompletedTasks())
 //      content (array) -> task (object: name (str), dateTime (str), 

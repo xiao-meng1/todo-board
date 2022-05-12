@@ -12,13 +12,14 @@
 }
 
 html, body {
-    width: 100%;
+    height: 100%;
     margin: 0;
 }
 
 body {
     display: grid;
     grid-template-rows: auto 1fr;
+    position: relative;
     background-color: rgb(190, 219, 229);
 }
 
@@ -148,4 +149,126 @@ header {
     padding: 10px;
     border-radius: 10px;
     text-align: center;
+}
+
+.popup-container {
+    position: absolute;
+    top: 34%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px;
+    border-radius: 10px;
+    background-color: aliceblue;
+}
+
+.popup-container > .icon-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.popup-container .icon {
+    height: 16px;
+}
+
+.popup-container > .popup-content {
+    padding: 0 20px;
+}
+
+.popup-container > .popup-content > input {
+    box-sizing: border-box;
+    width: 100%;
+    font-size: 20px;
+    margin-bottom: 20px;
+    border: none;
+    outline: none;
+    background-color: aliceblue;
+}
+
+.popup-container > .popup-content > fieldset {
+    border: none;
+    padding: 0 0 10px 0;
+    margin: 0;
+}
+
+.popup-container fieldset > legend {
+    padding-bottom: 10px;
+    font-size: 16px;
+}
+
+.popup-container fieldset > .color-buttons {
+    display: grid;
+    grid-template-columns: repeat(5, auto);
+    grid-template-rows: repeat(2, 40px);
+    justify-items: center;
+    align-items: center;
+
+}
+
+.popup-container .color-buttons input[type="radio"]:after {
+    width: 30px;
+    height: 30px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 15px;
+    position: relative;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+}
+
+.popup-container .color-buttons input[type="radio"]#red:after {
+    background-color: red;
+}
+
+.popup-container .color-buttons input[type="radio"]#green:after {
+    background-color: green;
+}
+
+.popup-container .color-buttons input[type="radio"]#blue:after {
+    background-color: blue;
+}
+
+.popup-container .color-buttons input[type="radio"]#orange:after {
+    background-color: orange;
+}
+
+.popup-container .color-buttons input[type="radio"]#teal:after {
+    background-color: teal;
+}
+
+.popup-container .color-buttons input[type="radio"]#lightgrey:after {
+    background-color: lightgrey;
+}
+.popup-container .color-buttons input[type="radio"]#grey:after {
+    background-color: grey;
+}
+
+.popup-container .color-buttons input[type="radio"]#darkgrey:after {
+    background-color: darkgrey;
+}
+
+.popup-container .color-buttons input[type="radio"]#black:after {
+    background-color: black;
+}
+
+.popup-container .color-buttons input[type="radio"]#magenta:after {
+    background-color: magenta;
+}
+
+.popup-container .color-buttons input[type="radio"]:checked:after {
+    width: 30px;
+    height: 30px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 15px;
+    position: relative;
+    background-image: url("./icons/circle_white_24dp.svg");
+    background-position: center;
+    background-repeat:no-repeat;
+    background-size: 16px;
+    content: '';
+    display: inline-block;
+    visibility: visible;
 }

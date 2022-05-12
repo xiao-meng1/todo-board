@@ -12,4 +12,14 @@ const addNewList = () => {
     view.createList(newList);
 }
 
-export {init, addNewList};
+const addNewListPopup = (e) => {
+    view.createAddNewListPopup();
+};
+
+const exitPopup = (e) => {
+    view.removePopup();
+    view.removeBoardBlocker();
+    return false;
+};
+
+export {init, addNewList, addNewListPopup, exitPopup};

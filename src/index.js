@@ -27,7 +27,9 @@ controller.addNewList();
 //  newTaskPopup (nodelist)
 //  editListPopup (nodeList)
 //  editTaskPopup (nodeList)
-//  initializeTemplate(), createTemplate(), addTemplate() addPopup(), removePopup(), createList(), 
+//  initializeTemplate(), createTemplate(), addTemplate(),
+//  createAddNewListPopup(), createAddNewTaskPopup(), createEditListPopup(),
+//  createEditTaskPopup(), addPopup(), removePopup(), createList(), 
 //  createTask(), addList(), addTask()
 //  
 //Controller

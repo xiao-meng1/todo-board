@@ -69,9 +69,9 @@ const createAddNewListPopup = () => {
     const popup = createPopupTemplate();
     const colorPickerFieldset = createColorPickerFieldset();
     const popupContent = popup.querySelector(".popup-content");
-    const listTitle = popup.querySelector("input#list-title");
+    const popupTitle = popup.querySelector("input.popup-title");
 
-    listTitle.placeholder = "Enter List Title";
+    popupTitle.placeholder = "Enter List Title";
     
     popupContent.appendChild(colorPickerFieldset);
 
@@ -85,21 +85,23 @@ const createPopupTemplate = () => {
     const iconContainer = document.createElement("div");
     const icon = document.createElement("img");
     const popupContent = document.createElement("div");
-    const listTitle = document.createElement("input");
+    const popupTitle = document.createElement("input");
 
     popupContainer.classList = "popup-container";
     iconContainer.classList = "icon-container";
     icon.classList = "icon";
     icon.src = "../src/icons/close_black_24dp.svg";
     popupContent.classList = "popup-content";
-    listTitle.type = "text";
-    listTitle.id = "list-title";
+    popupTitle.type = "text";
+    popupTitle.classList = "popup-title";
+
+    icon.addEventListener("click", controller.exitPopup);
 
     popupTemplate.appendChild(popupContainer);
     popupContainer.appendChild(iconContainer);
     popupContainer.appendChild(popupContent);
     iconContainer.appendChild(icon);
-    popupContent.appendChild(listTitle);
+    popupContent.appendChild(popupTitle);
 
     return popupTemplate;
 };
@@ -196,7 +198,19 @@ const addBoardBlocker = () => {
     board.style.opacity = 0.4;
     boardBlocker.classList = "board-blocker";
 
-    boardBlocker.addEventListener("click", controller.exitPopup);
+    boardBlocker.addEventListener("click", (e) => {
+        if (popupFilled()) {
+            const popupTitle = document.querySelector(".popup-title");
+            const selectedColorButton = document.querySelector(
+                "input[name='color']:checked"
+                );
+            controller.addNewList(
+                popupTitle.value, selectedColorButton.value
+                );
+        }
+        
+        controller.exitPopup(e);
+    });
 
     board.appendChild(boardBlocker);
 };
@@ -207,6 +221,12 @@ const removeBoardBlocker = () => {
     
     board.style.opacity = 1;
     boardBlocker.remove();
+};
+
+const popupFilled = () => {
+    const popupTitle = document.querySelector(".popup-title");
+    
+    return (popupTitle.value === "") ? false : true;
 };
 
 export {initializeTemplate,

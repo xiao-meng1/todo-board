@@ -6,8 +6,8 @@ const init = () => {
     view.initializeTemplate();
 }
 
-const addNewList = () => {
-    const newListIndex = model.createList("Sample list", "blue");
+const addNewList = (listTitle, listColor) => {
+    const newListIndex = model.createList(listTitle, listColor);
     const newList = model.getList(newListIndex);
     view.createList(newList);
 }

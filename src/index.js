@@ -4,7 +4,6 @@ import * as controller from "./scripts/controller.js";
 controller.init();
 
 //test function calls
-controller.addNewList();
 
 
 
@@ -29,7 +28,8 @@ controller.addNewList();
 //  editTaskPopup (nodeList)
 //  initializeTemplate(), createTemplate(), addTemplate(),
 //  createAddNewListPopup(), createAddNewTaskPopup(), createEditListPopup(),
-//  createEditTaskPopup(), addPopup(), removePopup(), createList(), 
+//  createEditTaskPopup(), addPopup(), removePopup(), addBoardBlocker(),
+//  removeBoardBlocker(), createList(), 
 //  createTask(), addList(), addTask()
 //  
 //Controller

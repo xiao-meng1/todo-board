@@ -38,6 +38,7 @@ const createList = (listObject) => {
     const plusIcon = document.createElement("img");
     const addNewTask = document.createElement("div");
 
+    list.dataset.index = listObject.index;
     list.classList = "list";
     list.style.borderLeftColor = listObject.color;
     listName.textContent = listObject.name;
@@ -55,16 +56,15 @@ const createList = (listObject) => {
     newTaskContainer.appendChild(addNewTask);
     plusIconContainer.appendChild(plusIcon);
 
-    return list;
+    addList(list);
 };
 
 const addList = (list) => {
     const board = document.querySelector(".board");
-    const addNewList = document.querySelector(".add-new-list");
-    board.insertBefore(list, addNewList);
+    const addNewListButton = document.querySelector(".add-new-list");
+    board.insertBefore(list, addNewListButton);
 };
 
 export {initializeTemplate,
         createList,
-        addList,
 };

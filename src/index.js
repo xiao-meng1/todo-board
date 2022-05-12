@@ -1,10 +1,12 @@
 import "./styles.css";
 import * as controller from "./scripts/controller.js";
 
-//controller.init();
+controller.init();
 
 //test function calls
-//controller.addNewList();
+controller.addNewList();
+
+
 
 //Planning
 //Index

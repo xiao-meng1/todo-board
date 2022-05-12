@@ -40,17 +40,31 @@ const boardInStorage = () => {
     return (localStorage.getItem("board") ? true : false);
 };
 
-const createList = (name, color) => {
+const List = (name, color) => {
     const content = [];
+    const index = board.length;
     const updateName = (newName) => {name = newName};
     const updateColor = (newColor) => {color = newColor};
 
-    return {name, color, content, updateName, updateColor};
+    return {name,
+            color,
+            index,
+            content,
+            updateName,
+            updateColor};
+};
+
+const createList = (name, color) => {
+    const newList = List(name, color);
+    addList(newList);
+    return newList.index;
 };
 
 const addList = (list) => {board.push(list)};
 
+const getList = (index) => Object.assign({}, board[index]);
+
 export {initializeBoard,
         createList,
-        addList,
+        getList,
 };

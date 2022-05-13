@@ -7,14 +7,14 @@ const init = () => {
 }
 
 const addNewList = (listTitle, listColor) => {
-    const newListIndex = model.createList(listTitle, listColor);
-    const newList = model.getList(newListIndex);
+    const newListKey = model.createList(listTitle, listColor);
+    const newList = model.getList(newListKey);
     view.createList(newList);
 };
 
-const editList = (index, name, color) => {
-    model.editList(index, name, color);
-    view.editList(index, name, color);
+const editList = (key, name, color) => {
+    model.editList(key, name, color);
+    view.editList(key, name, color);
 };
 
 const exitPopup = () => {
@@ -22,14 +22,26 @@ const exitPopup = () => {
     view.removeBoardBlocker();
 };
 
-const getListTitle = (listIndex) => {
-    const list = model.getList(listIndex);
+const getListTitle = (listKey) => {
+    const list = model.getList(listKey);
     return list.name;
 };
 
-const getListColor = (listIndex) => {
-    const list = model.getList(listIndex);
+const getListColor = (listKey) => {
+    const list = model.getList(listKey);
     return list.color;
 };
 
-export {init, addNewList, editList, exitPopup, getListTitle, getListColor};
+const deleteList = (listKey) => {
+    model.deleteList(listKey);
+    view.deleteList(listKey);
+};
+
+export {init,
+        addNewList,
+        editList,
+        exitPopup,
+        getListTitle,
+        getListColor,
+        deleteList,
+};

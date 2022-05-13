@@ -38,7 +38,7 @@ const createList = (listObject) => {
     const plusIcon = document.createElement("img");
     const addNewTask = document.createElement("div");
 
-    list.dataset.index = listObject.index;
+    list.dataset.key = listObject.key;
     list.classList = "list";
     list.style.borderLeftColor = listObject.color;
     listName.textContent = listObject.name;
@@ -84,20 +84,29 @@ const createAddNewListPopup = () => {
 };
 
 const createEditListPopup = (e) => {
-    const listIndex = e.target.parentNode.dataset.index;
-    const listColor = controller.getListColor(listIndex);
-    const popup = createPopupTemplate();
+    const listKey = e.target.parentNode.dataset.key;
+    const listColor = controller.getListColor(listKey);
     const colorPickerFieldset = createColorPickerFieldset(listColor);
+    const popup = createPopupTemplate();
     const popupContainer = popup.querySelector(".popup-container");
     const popupContent = popup.querySelector(".popup-content");
     const popupTitle = popup.querySelector("input.popup-title");
+    const deleteButton = document.createElement("div");
 
     popupContainer.id = "edit-list";
-    popupContainer.dataset.listIndex = listIndex;
-    popupTitle.value = controller.getListTitle(listIndex);
+    popupContainer.dataset.listKey = listKey;
+    popupTitle.value = controller.getListTitle(listKey);
     popupTitle.placeholder = "Enter List Title";
+    deleteButton.textContent = "Delete list";
+    deleteButton.classList = "button delete-list";
+
+    deleteButton.addEventListener("click", () => {
+        controller.exitPopup();
+        controller.deleteList(listKey);
+    });
 
     popupContent.appendChild(colorPickerFieldset);
+    popupContent.appendChild(deleteButton);
 
     addPopup(popup);
     addBoardBlocker();
@@ -207,8 +216,6 @@ const boardBlockerClick = (e) => {
 
     if (!(popupFilled())) {
         controller.exitPopup(e);
-
-        return false;
     }
     
     switch(popupType) {
@@ -226,7 +233,7 @@ const boardBlockerClick = (e) => {
                 document.querySelector("input[name='color']:checked");
 
             controller.editList(
-                popupContainer.dataset.listIndex,
+                popupContainer.dataset.listKey,
                 popupTitle.value,
                 selectedColorButton.value
             );
@@ -252,12 +259,17 @@ const popupFilled = () => {
     return (popupTitle.value === "") ? false : true;
 };
 
-const editList = (index, name, color) => {
-    const list = document.querySelector(`.list[data-index='${index}']`)
+const editList = (key, name, color) => {
+    const list = document.querySelector(`.list[data-key='${key}']`)
     const listName = list.querySelector(".list-name");
 
     list.style.borderLeftColor = color;
     listName.textContent = name;
+};
+
+const deleteList = (key) => {
+    const list = document.querySelector(`.list[data-key='${key}']`)
+    list.remove();
 };
 
 export {initializeTemplate,
@@ -266,4 +278,5 @@ export {initializeTemplate,
         removePopup,
         removeBoardBlocker,
         editList,
+        deleteList,
 };

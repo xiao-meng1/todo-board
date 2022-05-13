@@ -1,13 +1,14 @@
 import * as controller from "./controller.js"
 
 let board;
+let lowestAvailableListKey = 0;
 
 const initializeBoard = () => {
     if (storageAvailable("localStorage") && boardInStorage()) {
         board = localStorage.getItem("board");
     }
     else {
-        board = [];
+        board = {};
     }
 };
 
@@ -42,13 +43,15 @@ const boardInStorage = () => {
 
 const List = (name, color) => {
     const content = [];
-    const index = board.length;
+    const key = lowestAvailableListKey.toString();
     const updateName = (newName) => {name = newName};
     const updateColor = (newColor) => {color = newColor};
 
+    lowestAvailableListKey++;
+
     return {name,
             color,
-            index,
+            key,
             content,
             updateName,
             updateColor};
@@ -56,21 +59,28 @@ const List = (name, color) => {
 
 const createList = (name, color) => {
     const newList = List(name, color);
-    addList(newList);
-    return newList.index;
+    addList(newList.key, newList);
+    return newList.key;
 };
 
-const editList = (index, name, color) => {
-    board[index].name = name;
-    board[index].color = color;
+const editList = (key, name, color) => {
+    board[key].name = name;
+    board[key].color = color;
+    console.log(board)
 };
 
-const addList = (list) => {board.push(list)};
+const addList = (key, list) => {board[key] = list};
 
-const getList = (index) => Object.assign({}, board[index]);
+const getList = (key) => Object.assign({}, board[key]);
+
+const deleteList = (key) => {
+    delete board[key];
+    console.log(board)
+};
 
 export {initializeBoard,
         createList,
         editList,
         getList,
+        deleteList,
 };

@@ -16,7 +16,7 @@ const createTemplate = () => {
     addNewList.classList = "add-new-list";
     addNewList.textContent = "+ Add new list";
 
-    addNewList.addEventListener("click", controller.addNewListPopup);
+    addNewList.addEventListener("click", createAddNewListPopup);
 
     template.appendChild(header);
     template.appendChild(board);
@@ -50,6 +50,8 @@ const createList = (listObject) => {
     plusIcon.classList = "icon";
     plusIcon.src = "../src/icons/add_black_24dp.svg"
 
+    listName.addEventListener("click", createEditListPopup);
+
     list.appendChild(listName);
     list.appendChild(newTaskContainer);
     newTaskContainer.appendChild(plusIconContainer);
@@ -68,11 +70,33 @@ const addList = (list) => {
 const createAddNewListPopup = () => {
     const popup = createPopupTemplate();
     const colorPickerFieldset = createColorPickerFieldset();
+    const popupContainer = popup.querySelector(".popup-container");
     const popupContent = popup.querySelector(".popup-content");
     const popupTitle = popup.querySelector("input.popup-title");
 
+    popupContainer.id = "add-new-list";
     popupTitle.placeholder = "Enter List Title";
     
+    popupContent.appendChild(colorPickerFieldset);
+
+    addPopup(popup);
+    addBoardBlocker();
+};
+
+const createEditListPopup = (e) => {
+    const listIndex = e.target.parentNode.dataset.index;
+    const listColor = controller.getListColor(listIndex);
+    const popup = createPopupTemplate();
+    const colorPickerFieldset = createColorPickerFieldset(listColor);
+    const popupContainer = popup.querySelector(".popup-container");
+    const popupContent = popup.querySelector(".popup-content");
+    const popupTitle = popup.querySelector("input.popup-title");
+
+    popupContainer.id = "edit-list";
+    popupContainer.dataset.listIndex = listIndex;
+    popupTitle.value = controller.getListTitle(listIndex);
+    popupTitle.placeholder = "Enter List Title";
+
     popupContent.appendChild(colorPickerFieldset);
 
     addPopup(popup);
@@ -106,7 +130,7 @@ const createPopupTemplate = () => {
     return popupTemplate;
 };
 
-const createColorPickerFieldset = () => {
+const createColorPickerFieldset = (selectedButton = "black") => {
     const fieldset = document.createElement("fieldset");
     const legend = document.createElement("legend");
     const colorButtons = document.createElement("div");
@@ -120,64 +144,37 @@ const createColorPickerFieldset = () => {
     const darkgreyButton = document.createElement("input");
     const blackButton = document.createElement("input");
     const magentaButton = document.createElement("input");
+    const buttons = {
+        red: redButton,
+        green: greenButton,
+        blue: blueButton,
+        orange: orangeButton,
+        teal: tealButton,
+        lightgrey: lightgreyButton,
+        grey: greyButton,
+        darkgrey: darkgreyButton,
+        black: blackButton,
+        magenta: magentaButton,
+    };
 
+    for (const button in buttons) {
+        buttons[button].type = "radio";
+        buttons[button].name = "color";
+        buttons[button].id = button;
+        buttons[button].value = button;
+    }
+
+    buttons[selectedButton].setAttribute("checked", "");
     legend.textContent = "List Color";
     colorButtons.classList = "color-buttons";
-    redButton.type = "radio";
-    redButton.name = "color";
-    redButton.id = "red";
-    redButton.value = "red";
-    greenButton.type = "radio";
-    greenButton.name = "color";
-    greenButton.id = "green";
-    greenButton.value = "green";
-    blueButton.type = "radio";
-    blueButton.name = "color";
-    blueButton.id = "blue";
-    blueButton.value = "blue";
-    orangeButton.type = "radio";
-    orangeButton.name = "color";
-    orangeButton.id = "orange";
-    orangeButton.value = "orange";
-    tealButton.type = "radio";
-    tealButton.name = "color";
-    tealButton.id = "teal";
-    tealButton.value = "teal";
-    lightgreyButton.type = "radio";
-    lightgreyButton.name = "color";
-    lightgreyButton.id = "lightgrey";
-    lightgreyButton.value = "lightgrey";
-    greyButton.type = "radio";
-    greyButton.name = "color";
-    greyButton.id = "grey";
-    greyButton.value = "grey";
-    darkgreyButton.type = "radio";
-    darkgreyButton.name = "color";
-    darkgreyButton.id = "darkgrey";
-    darkgreyButton.value = "darkgrey";
-    blackButton.type = "radio";
-    blackButton.name = "color";
-    blackButton.id = "black";
-    blackButton.value = "black";
-    blackButton.setAttribute("checked", "");
-    magentaButton.type = "radio";
-    magentaButton.name = "color";
-    magentaButton.id = "magenta";
-    magentaButton.value = "magenta";
 
     fieldset.appendChild(legend);
     fieldset.appendChild(colorButtons);
-    colorButtons.appendChild(redButton);
-    colorButtons.appendChild(greenButton);
-    colorButtons.appendChild(blueButton);
-    colorButtons.appendChild(orangeButton);
-    colorButtons.appendChild(tealButton);
-    colorButtons.appendChild(lightgreyButton);
-    colorButtons.appendChild(greyButton);
-    colorButtons.appendChild(darkgreyButton);
-    colorButtons.appendChild(blackButton);
-    colorButtons.appendChild(magentaButton);
 
+    for (const button in buttons) {
+        colorButtons.appendChild(buttons[button]);
+    }
+    
     return fieldset;
 };
 
@@ -198,21 +195,47 @@ const addBoardBlocker = () => {
     board.style.opacity = 0.4;
     boardBlocker.classList = "board-blocker";
 
-    boardBlocker.addEventListener("click", (e) => {
-        if (popupFilled()) {
-            const popupTitle = document.querySelector(".popup-title");
-            const selectedColorButton = document.querySelector(
-                "input[name='color']:checked"
-                );
-            controller.addNewList(
-                popupTitle.value, selectedColorButton.value
-                );
-        }
-        
-        controller.exitPopup(e);
-    });
-
+    boardBlocker.addEventListener("click", boardBlockerClick);
     board.appendChild(boardBlocker);
+};
+
+const boardBlockerClick = (e) => {
+    const popupContainer = document.querySelector(".popup-container");
+    const popupType = popupContainer.id;
+    const popupTitle = document.querySelector(".popup-title");
+    let selectedColorButton;
+
+    if (!(popupFilled())) {
+        controller.exitPopup(e);
+
+        return false;
+    }
+    
+    switch(popupType) {
+        case "add-new-list":
+            selectedColorButton = 
+                document.querySelector("input[name='color']:checked");
+                
+            controller.addNewList(
+                popupTitle.value,
+                selectedColorButton.value
+            );
+            break;
+        case "edit-list":
+            selectedColorButton = 
+                document.querySelector("input[name='color']:checked");
+
+            controller.editList(
+                popupContainer.dataset.listIndex,
+                popupTitle.value,
+                selectedColorButton.value
+            );
+            break;
+    }
+
+    controller.exitPopup();
+
+    return false;
 };
 
 const removeBoardBlocker = () => {
@@ -229,9 +252,18 @@ const popupFilled = () => {
     return (popupTitle.value === "") ? false : true;
 };
 
+const editList = (index, name, color) => {
+    const list = document.querySelector(`.list[data-index='${index}']`)
+    const listName = list.querySelector(".list-name");
+
+    list.style.borderLeftColor = color;
+    listName.textContent = name;
+};
+
 export {initializeTemplate,
         createList,
         createAddNewListPopup,
         removePopup,
         removeBoardBlocker,
+        editList,
 };

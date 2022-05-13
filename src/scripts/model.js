@@ -60,11 +60,17 @@ const createList = (name, color) => {
     return newList.index;
 };
 
+const editList = (index, name, color) => {
+    board[index].name = name;
+    board[index].color = color;
+};
+
 const addList = (list) => {board.push(list)};
 
 const getList = (index) => Object.assign({}, board[index]);
 
 export {initializeBoard,
         createList,
+        editList,
         getList,
 };

@@ -41,32 +41,31 @@ const boardInStorage = () => {
     return (localStorage.getItem("board") ? true : false);
 };
 
-const List = (name, color) => {
-    const content = [];
+const List = (title, color) => {
+    const content = {};
     const key = lowestAvailableListKey.toString();
-    const updateName = (newName) => {name = newName};
+    const updateTitle = (newTitle) => {title = newTitle};
     const updateColor = (newColor) => {color = newColor};
 
     lowestAvailableListKey++;
 
-    return {name,
+    return {title,
             color,
             key,
             content,
-            updateName,
+            updateTitle,
             updateColor};
 };
 
-const createList = (name, color) => {
-    const newList = List(name, color);
+const createList = (title, color) => {
+    const newList = List(title, color);
     addList(newList.key, newList);
     return newList.key;
 };
 
-const editList = (key, name, color) => {
-    board[key].name = name;
+const editList = (key, title, color) => {
+    board[key].title = title;
     board[key].color = color;
-    console.log(board)
 };
 
 const addList = (key, list) => {board[key] = list};
@@ -78,9 +77,24 @@ const deleteList = (key) => {
     console.log(board)
 };
 
+const Task = (listKey, title, datetime, priority) => {
+    
+
+    return {listKey,
+            title,
+            datetime,
+            priority,
+    };
+};
+
+const createTask = (listKey, title, datetime, priority) => {
+    console.log(listKey, title, datetime, priority)
+};
+
 export {initializeBoard,
         createList,
         editList,
         getList,
         deleteList,
+        createTask,
 };

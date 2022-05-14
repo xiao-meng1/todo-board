@@ -57,8 +57,8 @@ header {
     border-left: solid black 10px;
 }
 
-.list > .list-name {
-    padding-bottom: 30px;
+.list > .list-title {
+    padding-bottom: 15px;
     font-size: 20px;
 }
 
@@ -66,7 +66,7 @@ header {
     display: grid;
     grid-template-columns: 20px 1fr;
     gap: 4px;
-    padding-bottom: 20px;
+    padding: 10px;
 }
 
 .list > .new-task-container > .plus-icon-container {
@@ -94,7 +94,7 @@ header {
     gap: 4px;
 }
 
-.list .task-container > .task-name {
+.list .task-container > .task-title {
     display: flex;
     align-items: center;
 }
@@ -146,7 +146,7 @@ header {
     padding: 0 20px;
 }
 
-.popup-container > .popup-content > input {
+.popup-container > .popup-content input {
     box-sizing: border-box;
     width: 100%;
     font-size: 20px;
@@ -173,7 +173,6 @@ header {
     grid-template-rows: repeat(2, 40px);
     justify-items: center;
     align-items: center;
-
 }
 
 .popup-container .color-buttons input[type="radio"]:after {
@@ -255,3 +254,72 @@ header {
     font-size: 16px;
     background-color: rgba(255, 0, 0, 0.4);
 }
+
+.popup-container > .popup-content .datetime-picker {
+    font-size: 16px;
+}
+
+.popup-container fieldset > .priority-buttons {
+    position: relative;
+    height: 20px;
+}
+
+.popup-container fieldset .container {
+    box-sizing: border-box;
+    position: absolute;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-items: center;
+    align-items: center;
+    width: 100%;
+}
+
+.popup-container fieldset .radio.container > input {
+    z-index: 999;
+    visibility: hidden;
+    height: 20px;
+    width: 50px;
+}
+
+.popup-container fieldset .radio.container > input:after {
+    width: 60px;
+    height: 30px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 15px;
+    position: relative;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+}
+
+.popup-container fieldset .radio.container > input.low:after {
+    background-color: rgba(0, 128, 0, 0.2);
+}
+
+.popup-container fieldset .radio.container > input.medium:after {
+    background-color: rgba(255, 166, 0, 0.2);
+}
+
+.popup-container fieldset .radio.container > input.high:after {
+    background-color: rgba(255, 0, 0, 0.2);
+}
+
+.popup-container fieldset .radio.container > input.low:checked:after {
+    background-color: rgba(0, 128, 0, 0.5);
+}
+
+.popup-container fieldset .radio.container > input.medium:checked:after {
+    background-color: rgba(255, 166, 0, 0.6);
+}
+
+.popup-container fieldset .radio.container > input.high:checked:after {
+    background-color: rgba(255, 0, 0, 0.5);
+}
+
+.popup-container fieldset .text.container > div {
+    padding: 4px 16px;
+    border-radius: 20px;
+}
+

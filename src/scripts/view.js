@@ -32,7 +32,7 @@ const addTemplate = (template) => {
 
 const createList = (listObject) => {
     const list = document.createElement("div");
-    const listName = document.createElement("div");
+    const listTitle = document.createElement("div");
     const newTaskContainer = document.createElement("div");
     const plusIconContainer = document.createElement("div");
     const plusIcon = document.createElement("img");
@@ -41,8 +41,8 @@ const createList = (listObject) => {
     list.dataset.key = listObject.key;
     list.classList = "list";
     list.style.borderLeftColor = listObject.color;
-    listName.textContent = listObject.name;
-    listName.classList = "list-name";
+    listTitle.textContent = listObject.title;
+    listTitle.classList = "list-title";
     newTaskContainer.classList = "new-task-container";
     plusIconContainer.classList = "plusIconContainer";
     addNewTask.textContent = "Add new task";
@@ -50,9 +50,10 @@ const createList = (listObject) => {
     plusIcon.classList = "icon";
     plusIcon.src = "../src/icons/add_black_24dp.svg"
 
-    listName.addEventListener("click", createEditListPopup);
+    listTitle.addEventListener("click", createEditListPopup);
+    newTaskContainer.addEventListener("click", createAddNewTaskPopup);
 
-    list.appendChild(listName);
+    list.appendChild(listTitle);
     list.appendChild(newTaskContainer);
     newTaskContainer.appendChild(plusIconContainer);
     newTaskContainer.appendChild(addNewTask);
@@ -75,7 +76,7 @@ const createAddNewListPopup = () => {
     const popupTitle = popup.querySelector("input.popup-title");
 
     popupContainer.id = "add-new-list";
-    popupTitle.placeholder = "Enter List Title";
+    popupTitle.placeholder = "Enter list title";
     
     popupContent.appendChild(colorPickerFieldset);
 
@@ -84,7 +85,7 @@ const createAddNewListPopup = () => {
 };
 
 const createEditListPopup = (e) => {
-    const listKey = e.target.parentNode.dataset.key;
+    const listKey = e.srcElement.parentNode.dataset.key;
     const listColor = controller.getListColor(listKey);
     const colorPickerFieldset = createColorPickerFieldset(listColor);
     const popup = createPopupTemplate();
@@ -96,7 +97,7 @@ const createEditListPopup = (e) => {
     popupContainer.id = "edit-list";
     popupContainer.dataset.listKey = listKey;
     popupTitle.value = controller.getListTitle(listKey);
-    popupTitle.placeholder = "Enter List Title";
+    popupTitle.placeholder = "Enter list title";
     deleteButton.textContent = "Delete list";
     deleteButton.classList = "button delete-list";
 
@@ -213,9 +214,13 @@ const boardBlockerClick = (e) => {
     const popupType = popupContainer.id;
     const popupTitle = document.querySelector(".popup-title");
     let selectedColorButton;
+    let selectedDateTime;
+    let selectedPriorityButton;
 
     if (!(popupFilled())) {
         controller.exitPopup(e);
+
+        return;
     }
     
     switch(popupType) {
@@ -238,11 +243,24 @@ const boardBlockerClick = (e) => {
                 selectedColorButton.value
             );
             break;
+        case "add-new-task":
+            selectedDateTime =
+                document.querySelector("input[name='datetime']");
+            selectedPriorityButton =
+                document.querySelector("input[name='priority']:checked");
+
+            controller.addNewTask(
+                popupContainer.dataset.listKey,
+                popupTitle.value,
+                selectedDateTime.value,
+                selectedPriorityButton.value
+            );
+
     }
 
     controller.exitPopup();
 
-    return false;
+    return;
 };
 
 const removeBoardBlocker = () => {
@@ -259,12 +277,12 @@ const popupFilled = () => {
     return (popupTitle.value === "") ? false : true;
 };
 
-const editList = (key, name, color) => {
+const editList = (key, title, color) => {
     const list = document.querySelector(`.list[data-key='${key}']`)
-    const listName = list.querySelector(".list-name");
+    const listTitle = list.querySelector(".list-title");
 
     list.style.borderLeftColor = color;
-    listName.textContent = name;
+    listTitle.textContent = title;
 };
 
 const deleteList = (key) => {
@@ -272,9 +290,95 @@ const deleteList = (key) => {
     list.remove();
 };
 
+const createAddNewTaskPopup = (e) => {
+    const popup = createPopupTemplate();
+    const popupContainer = popup.querySelector(".popup-container");
+    const popupContent = popup.querySelector(".popup-content");
+    const popupTitle = popup.querySelector("input.popup-title");
+    const dateTimeFieldset = createDateTimeFieldset();
+    const priorityFieldset = createPriorityFieldset();
+    const listKey = e.currentTarget.parentNode.dataset.key;
+
+    popupContainer.id = "add-new-task";
+    popupContainer.dataset.listKey = listKey;
+    popupTitle.placeholder = "Enter task title";
+
+    popupContent.appendChild(dateTimeFieldset);
+    popupContent.appendChild(priorityFieldset);
+
+    addPopup(popup);
+    addBoardBlocker();
+};
+
+const createDateTimeFieldset = () => {
+    const fieldset = document.createElement("fieldset");
+    const legend = document.createElement("legend");
+    const input = document.createElement("input");
+
+    legend.textContent = "Date/time";
+    input.type = "datetime-local";
+    input.name = "datetime";
+    input.classList = "datetime-picker";
+
+    fieldset.appendChild(legend);
+    fieldset.appendChild(input);
+
+    return fieldset;
+};
+
+const createPriorityFieldset = (selectedButton = "medium") => {
+    const fieldset = document.createElement("fieldset");
+    const legend = document.createElement("legend");
+    const priorityButtons = document.createElement("div");
+    const radioContainer = document.createElement("div");
+    const textContainer = document.createElement("div");
+    const lowRadio = document.createElement("input");
+    const mediumRadio = document.createElement("input");
+    const highRadio = document.createElement("input");
+    const lowText = document.createElement("div");
+    const mediumText = document.createElement("div");
+    const highText = document.createElement("div");
+    const buttons = {
+        low: lowRadio,
+        medium: mediumRadio,
+        high: highRadio,
+    };
+
+    for (const button in buttons) {
+        buttons[button].type = "radio";
+        buttons[button].name = "priority";
+        buttons[button].classList = button;
+        buttons[button].value = button;
+    }
+
+    buttons[selectedButton].setAttribute("checked", "");
+    legend.textContent = "Priority";
+    priorityButtons.classList = "priority-buttons";
+    radioContainer.classList = "radio container";
+    textContainer.classList = "text container";
+    lowText.textContent = "Low";
+    lowText.classList = "low";
+    mediumText.textContent = "Med";
+    mediumText.classList = "medium";
+    highText.textContent = "High";
+    highText.classList = "high";
+
+    fieldset.appendChild(legend);
+    fieldset.appendChild(priorityButtons);
+    priorityButtons.appendChild(radioContainer);
+    priorityButtons.appendChild(textContainer);
+    radioContainer.appendChild(lowRadio);
+    radioContainer.appendChild(mediumRadio);
+    radioContainer.appendChild(highRadio);
+    textContainer.appendChild(lowText);
+    textContainer.appendChild(mediumText);
+    textContainer.appendChild(highText);
+
+    return fieldset;
+};
+
 export {initializeTemplate,
         createList,
-        createAddNewListPopup,
         removePopup,
         removeBoardBlocker,
         editList,

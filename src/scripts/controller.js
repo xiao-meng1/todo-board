@@ -6,15 +6,15 @@ const init = () => {
     view.initializeTemplate();
 }
 
-const addNewList = (listTitle, listColor) => {
-    const newListKey = model.createList(listTitle, listColor);
+const addNewList = (title, color) => {
+    const newListKey = model.createList(title, color);
     const newList = model.getList(newListKey);
     view.createList(newList);
 };
 
-const editList = (key, name, color) => {
-    model.editList(key, name, color);
-    view.editList(key, name, color);
+const editList = (key, title, color) => {
+    model.editList(key, title, color);
+    view.editList(key, title, color);
 };
 
 const exitPopup = () => {
@@ -24,7 +24,7 @@ const exitPopup = () => {
 
 const getListTitle = (listKey) => {
     const list = model.getList(listKey);
-    return list.name;
+    return list.title;
 };
 
 const getListColor = (listKey) => {
@@ -37,6 +37,12 @@ const deleteList = (listKey) => {
     view.deleteList(listKey);
 };
 
+const addNewTask = (listKey, title, datetime, priority) => {
+    const newTaskKey = model.createTask(listKey, title, datetime, priority);
+    // const newTask = model.getTask(listKey, newTaskKey);
+    // view.createTask(listKey, newTask);
+};
+
 export {init,
         addNewList,
         editList,
@@ -44,4 +50,5 @@ export {init,
         getListTitle,
         getListColor,
         deleteList,
+        addNewTask,
 };

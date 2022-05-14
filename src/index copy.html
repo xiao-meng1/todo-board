@@ -8,7 +8,7 @@
     <header>Todo Board</header>
     <div class="board">
         <div class="list">
-            <div class="list-name">Sample List</div>
+            <div class="list-title">Sample List</div>
             <div class="new-task-container">
                 <div class="plus-icon-container">
                     <img class="icon" src="../src/icons/add_black_24dp.svg">
@@ -22,7 +22,7 @@
                         <div class="complete-icon-container">
                             <img class="icon" src="../src/icons/radio_button_unchecked_black_24dp.svg">
                         </div>
-                        <div class="task-name">Task name</div>
+                        <div class="task-title">Task name</div>
                         <div class="container">
                             <div class="task-time">1 p.m.</div>
                             <div class="priority-icon">High</div>
@@ -32,7 +32,7 @@
             </div>
         </div>
         <div class="list">
-            <div class="list-name">Sample List</div>
+            <div class="list-title">Sample List</div>
             <div class="new-task-container">
                 <div class="plus-icon-container">
                     <img class="icon" src="../src/icons/add_black_24dp.svg">
@@ -73,6 +73,34 @@
                 </div>
             </fieldset>
             <div class="button delete-list">Delete list</div>
+        </div>
+    </div>
+    <div class="popup-container">
+        <div class="icon-container">
+            <img class="icon" src="../src/icons/close_black_24dp.svg">
+        </div>
+        <div class="popup-content">
+            <input type="text" class="popup-title" placeholder="Enter task title">
+            <fieldset>
+                <legend>Date/time</legend>
+                <input type="datetime-local" name="datetime" class="datetime-picker">
+            </fieldset>
+            <fieldset>
+                <legend>Priority</legend>
+                <div class="priority-buttons">
+                    <div class="radio container">
+                        <input type="radio" name="priority" class="low" value="low">
+                        <input type="radio" name="priority" class="medium" value="medium" checked>
+                        <input type="radio" name="priority" class="high" value="high">
+                    </div>
+                    <div class="text container">
+                        <div class="low">Low</div>
+                        <div class="medium">Med</div>
+                        <div class="high">High</div>
+                    </div>
+                </div>            
+            </fieldset>
+            <div class="button delete-task">Delete task</div>
         </div>
     </div>
   </body>

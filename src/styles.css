@@ -106,10 +106,27 @@ header {
     gap: 10px;
 }
 
-.list .task-time, .list .priority-icon {
+.list .task-container .task-time {
     padding: 1px 8px;
     border-radius: 20px;
-    background-color: lightyellow;
+    background-color: aliceblue;
+}
+
+.list .task-container .priority-icon {
+    padding: 1px 8px;
+    border-radius: 20px;
+}
+
+.list .task-container .priority-icon.low {
+    background-color: rgba(0, 128, 0, 0.2);
+}
+
+.list .task-container .priority-icon.medium {
+    background-color: rgba(255, 166, 0, 0.2);
+}
+
+.list .task-container .priority-icon.high {
+    background-color: rgba(255, 0, 0, 0.2);
 }
 
 .list .icon {

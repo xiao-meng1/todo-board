@@ -1,4 +1,5 @@
 import * as controller from "./controller.js"
+import { add, format, parseISO, parse, compareDesc } from "date-fns";
 
 const initializeTemplate = () => {
     const template = createTemplate();
@@ -37,6 +38,7 @@ const createList = (listObject) => {
     const plusIconContainer = document.createElement("div");
     const plusIcon = document.createElement("img");
     const addNewTask = document.createElement("div");
+    const uncompleteContainer = document.createElement("div");
 
     list.dataset.key = listObject.key;
     list.classList = "list";
@@ -48,13 +50,15 @@ const createList = (listObject) => {
     addNewTask.textContent = "Add new task";
     addNewTask.classList = "add-new-task";
     plusIcon.classList = "icon";
-    plusIcon.src = "../src/icons/add_black_24dp.svg"
+    plusIcon.src = "../src/icons/add_black_24dp.svg";
+    uncompleteContainer.classList = "uncomplete-container";
 
     listTitle.addEventListener("click", createEditListPopup);
     newTaskContainer.addEventListener("click", createAddNewTaskPopup);
 
     list.appendChild(listTitle);
     list.appendChild(newTaskContainer);
+    list.appendChild(uncompleteContainer);
     newTaskContainer.appendChild(plusIconContainer);
     newTaskContainer.appendChild(addNewTask);
     plusIconContainer.appendChild(plusIcon);
@@ -214,7 +218,7 @@ const boardBlockerClick = (e) => {
     const popupType = popupContainer.id;
     const popupTitle = document.querySelector(".popup-title");
     let selectedColorButton;
-    let selectedDateTime;
+    let selectedDatetime;
     let selectedPriorityButton;
 
     if (!(popupFilled())) {
@@ -244,7 +248,7 @@ const boardBlockerClick = (e) => {
             );
             break;
         case "add-new-task":
-            selectedDateTime =
+            selectedDatetime =
                 document.querySelector("input[name='datetime']");
             selectedPriorityButton =
                 document.querySelector("input[name='priority']:checked");
@@ -252,7 +256,7 @@ const boardBlockerClick = (e) => {
             controller.addNewTask(
                 popupContainer.dataset.listKey,
                 popupTitle.value,
-                selectedDateTime.value,
+                selectedDatetime.value,
                 selectedPriorityButton.value
             );
 
@@ -295,7 +299,7 @@ const createAddNewTaskPopup = (e) => {
     const popupContainer = popup.querySelector(".popup-container");
     const popupContent = popup.querySelector(".popup-content");
     const popupTitle = popup.querySelector("input.popup-title");
-    const dateTimeFieldset = createDateTimeFieldset();
+    const datetimeFieldset = createDatetimeFieldset();
     const priorityFieldset = createPriorityFieldset();
     const listKey = e.currentTarget.parentNode.dataset.key;
 
@@ -303,14 +307,14 @@ const createAddNewTaskPopup = (e) => {
     popupContainer.dataset.listKey = listKey;
     popupTitle.placeholder = "Enter task title";
 
-    popupContent.appendChild(dateTimeFieldset);
+    popupContent.appendChild(datetimeFieldset);
     popupContent.appendChild(priorityFieldset);
 
     addPopup(popup);
     addBoardBlocker();
 };
 
-const createDateTimeFieldset = () => {
+const createDatetimeFieldset = () => {
     const fieldset = document.createElement("fieldset");
     const legend = document.createElement("legend");
     const input = document.createElement("input");
@@ -377,10 +381,135 @@ const createPriorityFieldset = (selectedButton = "medium") => {
     return fieldset;
 };
 
+const dateContainerExists = (listKey, datetime) => {
+    const list = document.querySelector(`.list[data-key="${listKey}"]`);
+    const dateContainers = list.querySelectorAll(".date-container");
+    const date = (datetime === "") ? "NO DUE DATE" : 
+        format(parseISO(datetime), 'E MMM d, y').toUpperCase();
+
+    for (let i = 0; i < dateContainers.length; i++) {
+        if (dateContainers[i].dataset.date === date) {
+            return true;
+        }
+    }
+
+    return false;
+};
+
+const createDateContainer = (listKey, datetime) => {
+    const list = document.querySelector(`.list[data-key="${listKey}"]`);
+    const dateContainer = document.createElement("div");
+    const dateText = document.createElement("div");
+    const date = (datetime === "") ? "NO DUE DATE" : 
+        format(parseISO(datetime), 'E MMM d, y').toUpperCase();
+
+    dateContainer.dataset.date = date;
+    dateContainer.classList = "date-container";
+    dateText.textContent = date;
+    dateText.classList = "date";
+
+    dateContainer.appendChild(dateText);
+    addDateContainer(list, dateContainer);
+};
+
+const addDateContainer = (list, dateContainer) => {
+    const uncompleteContainer = list.querySelector(".uncomplete-container");
+    const dateContainers = list.querySelectorAll(".date-container");
+
+    for (let i = 0; i < dateContainers.length; i++) {
+        if (dateContainers[i].dataset.date === "NO DUE DATE") {
+            uncompleteContainer.insertBefore(dateContainer, dateContainers[i]);
+
+            return;
+        }
+        
+        if (compareDesc(
+                parse(dateContainer.dataset.date, 'E MMM d, y', new Date()),
+                parse(dateContainers[i].dataset.date, 'E MMM d, y', new Date())
+            ) === 1) {
+            uncompleteContainer.insertBefore(dateContainer, dateContainers[i]);
+
+            return;
+        }
+    }
+
+    uncompleteContainer.appendChild(dateContainer);
+};
+
+const createTask = (listKey, task) => {
+    const taskContainer = document.createElement("div");
+    const completeIconContainer = document.createElement("div");
+    const icon = document.createElement("img");
+    const taskTitle = document.createElement("div");
+    const container = document.createElement("div");
+    const taskTime = document.createElement("div");
+    const priority = document.createElement("div");
+    const date = (task.datetime === "") ? "NO DUE DATE" : 
+        format(parseISO(task.datetime), 'E MMM d, y').toUpperCase();
+    const time = (task.datetime === "") ? "" :
+        format(parseISO(task.datetime), 'h:mm aaaa');
+
+    taskContainer.classList = "task-container";
+    taskContainer.dataset.key = task.key;
+    taskContainer.dataset.date = date;
+    taskContainer.dataset.time = time;
+    completeIconContainer.classList = "complete-icon-container";
+    icon.classList = "icon";
+    icon.src = "../src/icons/radio_button_unchecked_black_24dp.svg";
+    taskTitle.classList = "task-title";
+    taskTitle.textContent = task.title;
+    container.classList = "container";
+    taskTime.classList = "task-time";
+    priority.classList = `priority-icon ${task.priority.toLowerCase()}`;
+    priority.textContent = task.priority;
+
+    taskContainer.appendChild(completeIconContainer);
+    taskContainer.appendChild(taskTitle);
+    taskContainer.appendChild(container);
+    completeIconContainer.appendChild(icon);
+    container.appendChild(priority);
+
+    if (task.datetime !== "") {
+        taskTime.textContent = format(parseISO(task.datetime), 'h:mm aaaa');
+        container.appendChild(taskTime);
+    }
+
+    addTask(listKey, taskContainer);
+};
+
+const addTask = (listKey, taskContainer) => {
+    const list = document.querySelector(`.list[data-key="${listKey}"]`);
+    const date = taskContainer.dataset.date;
+    const dateContainer = list.querySelector(`.date-container[data-date="${date}"`);
+    const taskContainers = dateContainer.querySelectorAll(".task-container");
+
+    if (date === "NO DUE DATE") {
+        dateContainer.appendChild(taskContainer);
+
+        return;
+    }
+
+    for (let i = 0; i < taskContainers.length; i++) {
+        if (compareDesc(
+            parse(taskContainer.dataset.time, 'h:mm aaaa', new Date()),
+            parse(taskContainers[i].dataset.time, 'h:mm aaaa', new Date())
+        ) === 1) {
+        dateContainer.insertBefore(taskContainer, taskContainers[i]);
+
+        return;
+        }
+    }
+
+    dateContainer.appendChild(taskContainer);
+};
+
 export {initializeTemplate,
         createList,
         removePopup,
         removeBoardBlocker,
         editList,
         deleteList,
+        dateContainerExists,
+        createDateContainer,
+        createTask,
 };

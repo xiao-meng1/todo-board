@@ -11,14 +11,12 @@ controller.init();
 //Index
 //  controller.init();
 //Model
-//  board (obj) -> list (object: name (str), color (str), content (obj),
+//  board (obj) -> list (object: title (str), color (str), content (obj),
 //                      lowestAvailableTaskKey (num),
-//                      updateName(), updateColor(),
-//                      delete(), deleteAllCompletedTasks())
-//      content (obj) -> key: task (object: name (str), dateTime (str), 
-//                              priority (str), complete (boolean), 
-//                              updateName(), updateDateTime(), updatePriority(), updateComplete(),
-//                              delete())
+//                      updateTitle(), updateColor(),
+//      content (obj) -> key: task (object: title (str), dateTime (str), 
+//                              priority (str),
+//                              updateName(), updateDateTime(), updatePriority(),
 //  inititializeBoard(), createList(), createTask(), addList(), addTask(), getList(), getTask(), updateList(),
 //      updateTask(), deleteList(), deleteTask()
 //

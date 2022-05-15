@@ -39,8 +39,13 @@ const deleteList = (listKey) => {
 
 const addNewTask = (listKey, title, datetime, priority) => {
     const newTaskKey = model.createTask(listKey, title, datetime, priority);
-    // const newTask = model.getTask(listKey, newTaskKey);
-    // view.createTask(listKey, newTask);
+    const newTask = model.getTask(listKey, newTaskKey);
+
+    if (!view.dateContainerExists(listKey, newTask.datetime)) {
+        view.createDateContainer(listKey, newTask.datetime);
+    }
+
+    view.createTask(listKey, newTask);
 };
 
 export {init,

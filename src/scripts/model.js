@@ -2,6 +2,7 @@ import * as controller from "./controller.js"
 
 let board;
 let lowestAvailableListKey = 0;
+let lowestAvailableTaskKey = 0;
 
 const initializeBoard = () => {
     if (storageAvailable("localStorage") && boardInStorage()) {
@@ -60,6 +61,7 @@ const List = (title, color) => {
 const createList = (title, color) => {
     const newList = List(title, color);
     addList(newList.key, newList);
+    
     return newList.key;
 };
 
@@ -68,7 +70,9 @@ const editList = (key, title, color) => {
     board[key].color = color;
 };
 
-const addList = (key, list) => {board[key] = list};
+const addList = (key, list) => {
+    board[key] = list;
+};
 
 const getList = (key) => Object.assign({}, board[key]);
 
@@ -78,17 +82,37 @@ const deleteList = (key) => {
 };
 
 const Task = (listKey, title, datetime, priority) => {
-    
+    const updateTitle = (newTitle) => {title = newTitle};
+    const updateDatetime = (newDatetime) => {datetime = newDatetime};
+    const key = lowestAvailableTaskKey.toString();
+
+    lowestAvailableTaskKey++;
 
     return {listKey,
             title,
+            key,
             datetime,
             priority,
+            updateTitle,
+            updateDatetime,
     };
 };
 
 const createTask = (listKey, title, datetime, priority) => {
-    console.log(listKey, title, datetime, priority)
+    const newTask = Task(listKey, title, datetime, priority);
+    addTask(newTask);
+
+    return newTask.key;
+};
+
+const addTask = (task) => {
+    board[task.listKey].content[task.key] = task;
+};
+
+const getTask = (listKey, key) => {
+    const task = board[listKey].content[key];
+
+    return Object.assign({}, task);
 };
 
 export {initializeBoard,
@@ -97,4 +121,5 @@ export {initializeBoard,
         getList,
         deleteList,
         createTask,
+        getTask,
 };

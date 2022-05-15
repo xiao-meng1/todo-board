@@ -1,5 +1,5 @@
 import * as controller from "./controller.js"
-import { add, format, parseISO, parse, compareDesc } from "date-fns";
+import { format, parseISO, parse, compareDesc } from "date-fns";
 
 const initializeTemplate = () => {
     const template = createTemplate();
@@ -446,7 +446,7 @@ const addDateContainer = (list, dateContainer) => {
     uncompleteContainer.appendChild(dateContainer);
 };
 
-const createTask = (listKey, task) => {
+const createTask = (listKey, taskObject) => {
     const taskContainer = document.createElement("div");
     const completeIconContainer = document.createElement("div");
     const icon = document.createElement("img");
@@ -454,25 +454,29 @@ const createTask = (listKey, task) => {
     const container = document.createElement("div");
     const taskTime = document.createElement("div");
     const priority = document.createElement("div");
-    const date = (task.datetime === "") ? "NO DUE DATE" : 
-        format(parseISO(task.datetime), 'E MMM d, y').toUpperCase();
-    const time = (task.datetime === "") ? "" :
-        format(parseISO(task.datetime), 'h:mm aaaa');
+    const date = (taskObject.datetime === "") ? "NO DUE DATE" : 
+        format(parseISO(taskObject.datetime), 'E MMM d, y').toUpperCase();
+    const time = (taskObject.datetime === "") ? "" :
+        format(parseISO(taskObject.datetime), 'h:mm aaaa');
 
     taskContainer.classList = "task-container";
-    taskContainer.dataset.key = task.key;
+    taskContainer.dataset.key = taskObject.key;
     taskContainer.dataset.date = date;
     taskContainer.dataset.time = time;
     completeIconContainer.classList = "complete-icon-container";
     icon.classList = "icon";
     icon.src = "../src/icons/radio_button_unchecked_black_24dp.svg";
+    icon.addEventListener("click", () => {
+        controller.deleteTask(listKey, taskObject.key);
+    });
     taskTitle.classList = "task-title";
-    taskTitle.textContent = task.title;
+    taskTitle.textContent = taskObject.title;
     taskTitle.addEventListener("click", createEditTaskPopup);
     container.classList = "container";
     taskTime.classList = "task-time";
-    priority.classList = `priority-icon ${task.priority.toLowerCase()}`;
-    priority.textContent = task.priority;
+    priority.classList = 
+        `priority-icon ${taskObject.priority.toLowerCase()}`;
+    priority.textContent = taskObject.priority;
 
     taskContainer.appendChild(completeIconContainer);
     taskContainer.appendChild(taskTitle);
@@ -480,8 +484,9 @@ const createTask = (listKey, task) => {
     completeIconContainer.appendChild(icon);
     container.appendChild(priority);
 
-    if (task.datetime !== "") {
-        taskTime.textContent = format(parseISO(task.datetime), 'h:mm aaaa');
+    if (taskObject.datetime !== "") {
+        taskTime.textContent = 
+            format(parseISO(taskObject.datetime), 'h:mm aaaa');
         container.appendChild(taskTime);
     }
 

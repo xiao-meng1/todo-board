@@ -2,8 +2,29 @@ import * as model from "./model.js";
 import * as view from "./view.js";
 
 const init = () => {
+    let board;
+    let list;
+    let task;
+
     model.initializeBoard();
+    board = model.getBoard();
     view.initializeTemplate();
+
+    for (let listKey in board) {
+        list = board[listKey];
+        view.createList(list);
+
+        for (let taskKey in list.content) {
+            task = list.content[taskKey];
+
+            if (!view.dateContainerExists(listKey, task.datetime)) {
+                view.createDateContainer(listKey, task.datetime);
+            }
+
+            view.createTask(listKey, task);
+        }
+
+    }
 }
 
 const addNewList = (title, color) => {

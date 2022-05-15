@@ -231,7 +231,6 @@ const boardBlockerClick = (e) => {
         case "add-new-list":
             selectedColorButton = 
                 document.querySelector("input[name='color']:checked");
-                
             controller.addNewList(
                 popupTitle.value,
                 selectedColorButton.value
@@ -240,7 +239,6 @@ const boardBlockerClick = (e) => {
         case "edit-list":
             selectedColorButton = 
                 document.querySelector("input[name='color']:checked");
-
             controller.editList(
                 popupContainer.dataset.listKey,
                 popupTitle.value,
@@ -252,14 +250,26 @@ const boardBlockerClick = (e) => {
                 document.querySelector("input[name='datetime']");
             selectedPriorityButton =
                 document.querySelector("input[name='priority']:checked");
-
             controller.addNewTask(
                 popupContainer.dataset.listKey,
                 popupTitle.value,
                 selectedDatetime.value,
                 selectedPriorityButton.value
             );
-
+            break;
+        case "edit-task":
+            selectedDatetime =
+                document.querySelector("input[name='datetime']");
+            selectedPriorityButton =
+                document.querySelector("input[name='priority']:checked");
+            controller.editTask(
+                popupContainer.dataset.listKey,
+                popupContainer.dataset.taskKey,
+                popupTitle.value,
+                selectedDatetime.value,
+                selectedPriorityButton.value
+            );
+            break;
     }
 
     controller.exitPopup();
@@ -282,7 +292,7 @@ const popupFilled = () => {
 };
 
 const editList = (key, title, color) => {
-    const list = document.querySelector(`.list[data-key='${key}']`)
+    const list = document.querySelector(`.list[data-key="${key}"]`)
     const listTitle = list.querySelector(".list-title");
 
     list.style.borderLeftColor = color;
@@ -290,7 +300,7 @@ const editList = (key, title, color) => {
 };
 
 const deleteList = (key) => {
-    const list = document.querySelector(`.list[data-key='${key}']`)
+    const list = document.querySelector(`.list[data-key="${key}"]`)
     list.remove();
 };
 
@@ -458,6 +468,7 @@ const createTask = (listKey, task) => {
     icon.src = "../src/icons/radio_button_unchecked_black_24dp.svg";
     taskTitle.classList = "task-title";
     taskTitle.textContent = task.title;
+    taskTitle.addEventListener("click", createEditTaskPopup);
     container.classList = "container";
     taskTime.classList = "task-time";
     priority.classList = `priority-icon ${task.priority.toLowerCase()}`;
@@ -503,6 +514,71 @@ const addTask = (listKey, taskContainer) => {
     dateContainer.appendChild(taskContainer);
 };
 
+const createEditTaskPopup = (e) => {
+    const popup = createPopupTemplate();
+    const popupContainer = popup.querySelector(".popup-container");
+    const popupContent = popup.querySelector(".popup-content");
+    const popupTitle = popup.querySelector("input.popup-title");
+    const listKey = e.srcElement.parentNode.parentNode.parentNode
+        .parentNode.dataset.key;
+    const taskKey = e.srcElement.parentNode.dataset.key;
+    const title = controller.getTaskTitle(listKey, taskKey);
+    const datetime = controller.getTaskDatetime(listKey, taskKey);
+    const priority = controller.getTaskPriority(listKey, taskKey);
+    const datetimeFieldset = createDatetimeFieldset();
+    const datetimeInput = 
+        datetimeFieldset.querySelector("input.datetime-picker");
+    const priorityFieldset = createPriorityFieldset(priority);
+    const deleteButton = document.createElement("div");
+
+    popupContainer.id = "edit-task";
+    popupContainer.dataset.listKey = listKey;
+    popupContainer.dataset.taskKey = taskKey;
+    popupTitle.value = title;
+    popupTitle.placeholder = "Enter task title";
+    datetimeInput.value = datetime;
+    deleteButton.textContent = "Delete task";
+    deleteButton.classList = "button delete-task";
+    deleteButton.addEventListener("click", () => {
+        controller.exitPopup();
+        controller.deleteTask(listKey, taskKey);
+    });
+
+    popupContent.appendChild(datetimeFieldset);
+    popupContent.appendChild(priorityFieldset);
+    popupContent.appendChild(deleteButton);
+
+    addPopup(popup);
+    addBoardBlocker();
+};
+
+const getDateContainer = (listKey, taskKey) => {
+    const list = document.querySelector(`.list[data-key="${listKey}"`);
+    const task = list.querySelector(`.task-container[data-key="${taskKey}"`);
+    const dateContainer = task.parentNode;
+    return dateContainer;
+};
+
+const dateContainerIsEmpty = (dateContainer) => {
+    const taskContainers = dateContainer.querySelectorAll(".task-container");
+    
+    if (taskContainers.length === 0) {
+        return true;
+    } else {
+        return false;
+    }
+};
+
+const deleteDateContainer = (dateContainer) => {
+    dateContainer.remove();
+};
+
+const deleteTask = (listKey, taskKey) => {
+    const list = document.querySelector(`.list[data-key="${listKey}"`);
+    const task = list.querySelector(`.task-container[data-key="${taskKey}"`);
+    task.remove();
+};
+
 export {initializeTemplate,
         createList,
         removePopup,
@@ -512,4 +588,8 @@ export {initializeTemplate,
         dateContainerExists,
         createDateContainer,
         createTask,
+        getDateContainer,
+        dateContainerIsEmpty,
+        deleteDateContainer,
+        deleteTask,
 };

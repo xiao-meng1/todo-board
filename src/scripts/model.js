@@ -78,7 +78,6 @@ const getList = (key) => Object.assign({}, board[key]);
 
 const deleteList = (key) => {
     delete board[key];
-    console.log(board)
 };
 
 const Task = (listKey, title, datetime, priority) => {
@@ -115,6 +114,31 @@ const getTask = (listKey, key) => {
     return Object.assign({}, task);
 };
 
+const getTaskTitle = (listKey, key) => {
+    const taskTitle = board[listKey].content[key].title;
+    return taskTitle;
+};
+
+const getTaskDatetime = (listKey, key) => {
+    const taskDatetime = board[listKey].content[key].datetime;
+    return taskDatetime;
+};
+
+const getTaskPriority = (listKey, key) => {
+    const taskPriority = board[listKey].content[key].priority;
+    return taskPriority;
+};
+
+const editTask = (listKey, taskKey, title, datetime, priority) => {
+    board[listKey].content[taskKey].title = title;
+    board[listKey].content[taskKey].datetime = datetime;
+    board[listKey].content[taskKey].priority = priority;
+};
+
+const deleteTask = (listKey, taskKey) => {
+    delete board[listKey].content[taskKey];
+};
+
 export {initializeBoard,
         createList,
         editList,
@@ -122,4 +146,9 @@ export {initializeBoard,
         deleteList,
         createTask,
         getTask,
+        getTaskTitle,
+        getTaskDatetime,
+        getTaskPriority,
+        editTask,
+        deleteTask,
 };

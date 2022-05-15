@@ -48,6 +48,52 @@ const addNewTask = (listKey, title, datetime, priority) => {
     view.createTask(listKey, newTask);
 };
 
+const getTaskTitle = (listKey, taskKey) => {
+    const taskTitle = model.getTaskTitle(listKey, taskKey);
+    return taskTitle;
+};
+
+const getTaskDatetime = (listKey, taskKey) => {
+    const taskDatetime = model.getTaskDatetime(listKey, taskKey);
+    return taskDatetime;
+};
+
+const getTaskPriority = (listKey, taskKey) => {
+    const taskPriority = model.getTaskPriority(listKey, taskKey);
+    return taskPriority;
+};
+
+const editTask = (listKey, taskKey, title, datetime, priority) => {
+    let task;
+    let oldDateContainer
+
+    model.editTask(listKey, taskKey, title, datetime, priority);
+    task = model.getTask(listKey, taskKey);
+    oldDateContainer = view.getDateContainer(listKey, taskKey);
+    view.deleteTask(listKey, taskKey);
+
+    if (view.dateContainerIsEmpty(oldDateContainer)) {
+        view.deleteDateContainer(oldDateContainer);
+    }
+
+    if (!view.dateContainerExists(listKey, task.datetime)) {
+        view.createDateContainer(listKey, task.datetime);
+    }
+
+    view.createTask(listKey, task);
+};
+
+const deleteTask = (listKey, taskKey) => {
+    const oldDateContainer = view.getDateContainer(listKey, taskKey);
+
+    model.deleteTask(listKey, taskKey);
+    view.deleteTask(listKey, taskKey);
+
+    if (view.dateContainerIsEmpty(oldDateContainer)) {
+        view.deleteDateContainer(oldDateContainer);
+    }
+};
+
 export {init,
         addNewList,
         editList,
@@ -56,4 +102,9 @@ export {init,
         getListColor,
         deleteList,
         addNewTask,
+        getTaskTitle,
+        getTaskDatetime,
+        getTaskPriority,
+        editTask,
+        deleteTask,
 };
